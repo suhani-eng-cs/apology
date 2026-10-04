@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OYE AJJU</title>
+  
+  <!-- Google Fonts: Playfair Display, Quicksand, Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- WhatsApp & Social Media Preview Tags -->
+  <meta property="og:title" content="A Little Surprise for You 🌸" />
+  <meta property="og:description" content="I have a confession, some peace-offering flowers, and coupons for you. Tap to open! 🤎" />
+  <meta property="og:type" content="website" />
+  <!-- Optional: An image link for the thumbnail (must be a full https link) -->
+  <meta property="og:image" content="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&auto=format&fit=crop" />
+  <style>
+    :root {
+      --bg-cream: #FAF6F0;
+      --card-cream: #FFFDF9;
+      --soft-beige: #F2E8DC;
+      --border-latte: #E2D3BE;
+      --caramel-accent: #C49A6C;
+      --warm-amber: #D8A47F;
+      --mocha: #6F4E37;
+      --deep-chocolate: #432818;
+      --soft-brown: #8D6B4F;
+      --shadow-warm: 0 10px 25px -4px rgba(74, 46, 24, 0.08), 0 4px 12px -2px rgba(74, 46, 24, 0.05);
+      --shadow-hover: 0 16px 32px -4px rgba(74, 46, 24, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--deep-chocolate);
+      font-family: 'Quicksand', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    #petal-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .main-container {
+      position: relative;
+      z-index: 1;
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .hero-card {
+      background: var(--card-cream);
+      border: 1.5px solid var(--border-latte);
+      border-radius: 28px;
+      padding: 2.25rem 1.5rem 1.75rem;
+      text-align: center;
+      box-shadow: var(--shadow-warm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--caramel-accent), var(--warm-amber), var(--mocha));
+    }
+
+    .flower-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--soft-beige);
+      color: var(--mocha);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.825rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .badge-icon {
+      width: 16px;
+      height: 16px;
+      fill: var(--mocha);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.15rem;
+      font-weight: 700;
+      color: var(--deep-chocolate);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title span {
+      display: block;
+      color: var(--mocha);
+      font-style: italic;
+      font-size: 1.65rem;
+      margin-top: 0.2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--soft-brown);
+      max-width: 420px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .bouquet-svg-container {
+      margin: 0 auto 0.75rem;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, var(--soft-beige) 55%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .bouquet-svg {
+      width: 90px;
+      height: 90px;
+      filter: drop-shadow(0 4px 6px rgba(111, 78, 55, 0.15));
+      animation: floatBouquet 3.5s ease-in-out infinite;
+    }
+
+    @keyframes floatBouquet {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+
+    .letter-card {
+      background: var(--card-cream);
+      border-radius: 24px;
+      border: 1px dashed var(--border-latte);
+      padding: 2rem 1.75rem;
+      box-shadow: var(--shadow-warm);
+      position: relative;
+    }
+
+    .letter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--soft-beige);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .letter-salutation {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--deep-chocolate);
+      font-weight: 700;
+    }
+
+    .wax-seal {
+      width: 34px;
+      height: 34px;
+      background: var(--mocha);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FAF6F0;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(74, 46, 24, 0.25);
+    }
+
+    .letter-body {
+      font-size: 0.98rem;
+      color: var(--deep-chocolate);
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+    }
+
+    .letter-body p {
+      margin-bottom: 1rem;
+    }
+
+    .handwritten-sign {
+      font-family: 'Caveat', cursive;
+      font-size: 1.75rem;
+      color: var(--mocha);
+      text-align: right;
+      margin-top: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      color: var(--deep-chocolate);
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--soft-brown);
+      margin-bottom: 1.25rem;
+    }
+
+    .coupons-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .coupon-ticket {
+      background: var(--card-cream);
+      border: 1.5px solid var(--border-latte);
+      border-radius: 18px;
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(74, 46, 24, 0.04);
+      position: relative;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+    .coupon-ticket:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--caramel-accent);
+    }
+
+    .coupon-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .coupon-emoji {
+      font-size: 1.8rem;
+      background: var(--soft-beige);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      flex-shrink: 0;
+    }
+
+    .coupon-text h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--deep-chocolate);
+      margin-bottom: 2px;
+    }
+
+    .coupon-text p {
+      font-size: 0.82rem;
+      color: var(--soft-brown);
+    }
+
+    .coupon-btn {
+      background: var(--soft-beige);
+      color: var(--mocha);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: none;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .coupon-ticket.redeemed {
+      background: #F4EFE6;
+      border-style: dashed;
+      opacity: 0.85;
+    }
+
+    .coupon-ticket.redeemed .coupon-btn {
+      background: var(--mocha);
+      color: #FFFDF9;
+    }
+
+    .forgiveness-box {
+      background: var(--card-cream);
+      border: 1.5px solid var(--border-latte);
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-warm);
+    }
+
+    .forgiveness-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--deep-chocolate);
+      margin-bottom: 0.5rem;
+    }
+
+    .forgiveness-box p {
+      font-size: 0.92rem;
+      color: var(--soft-brown);
+      margin-bottom: 1.5rem;
+    }
+
+    .buttons-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      min-height: 58px;
+      position: relative;
+    }
+
+    .btn-yes {
+      background: var(--mocha);
+      color: #FAF6F0;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(111, 78, 55, 0.3);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+    }
+
+    .btn-yes:active {
+      transform: scale(0.96);
+    }
+
+    .btn-shy {
+      background: var(--soft-beige);
+      color: var(--mocha);
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 11px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--border-latte);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .forgiven-celebration {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: var(--soft-beige);
+      border-radius: 16px;
+      border: 1px solid var(--caramel-accent);
+      animation: popIn 0.35s ease;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .forgiven-celebration h4 {
+      color: var(--deep-chocolate);
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .forgiven-celebration p {
+      color: var(--mocha);
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--soft-brown);
+      margin-top: 1rem;
+    }
+
+    .floral-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 1.5rem 0;
+      opacity: 0.6;
+    }
+
+    .floral-line {
+      height: 1px;
+      width: 50px;
+      background: var(--border-latte);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background petals canvas -->
+  <canvas id="petal-canvas"></canvas>
+
+  <div class="main-container">
+
+    <div class="hero-card">
+      <div class="flower-badge">
+        <svg class="badge-icon" viewBox="0 0 24 24">
+          <path d="M12 2C12.5 5 15 7.5 18 8C15 8.5 12.5 11 12 14C11.5 11 9 8.5 6 8C9 7.5 11.5 5 12 2Z"/>
+          <path d="M12 14C12.3 16 14 17.7 16 18C14 18.3 12.3 20 12 22C11.7 20 10 18.3 8 18C10 17.7 11.7 16 12 14Z" opacity="0.6"/>
+        </svg>
+        I Love You Ajju
+      </div>
+
+      <!-- Botanical SVG illustration in latte/chocolate palette -->
+      <div class="bouquet-svg-container">
+        <svg class="bouquet-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stems -->
+          <path d="M50 88C50 68 44 48 40 38" stroke="#8D6B4F" stroke-width="3" stroke-linecap="round"/>
+          <path d="M50 88C50 66 54 46 60 38" stroke="#8D6B4F" stroke-width="3" stroke-linecap="round"/>
+          <path d="M50 88L50 35" stroke="#6F4E37" stroke-width="3" stroke-linecap="round"/>
+          <!-- Ribbon Bow -->
+          <path d="M42 66C38 64 36 60 44 58C50 56 48 68 50 70C52 68 50 56 56 58C64 60 62 64 58 66" fill="#C49A6C"/>
+          <circle cx="50" cy="65" r="3.5" fill="#432818"/>
+          <!-- Flower 1: Soft Latte Rose -->
+          <circle cx="50" cy="30" r="16" fill="#E8DCC4"/>
+          <circle cx="50" cy="30" r="11" fill="#D8A47F"/>
+          <circle cx="50" cy="30" r="6" fill="#6F4E37"/>
+          <!-- Flower 2: Cream Daisy Left -->
+          <circle cx="34" cy="38" r="12" fill="#FAF6F0"/>
+          <circle cx="34" cy="38" r="5" fill="#C49A6C"/>
+          <!-- Flower 3: Cocoa Bloom Right -->
+          <circle cx="66" cy="38" r="12" fill="#FAF6F0"/>
+          <circle cx="66" cy="38" r="5" fill="#C49A6C"/>
+          <!-- Small floral sparkles -->
+          <circle cx="30" cy="22" r="2.5" fill="#D8A47F"/>
+          <circle cx="70" cy="22" r="2.5" fill="#D8A47F"/>
+        </svg>
+      </div>
+
+      <h1 class="hero-title">
+        <span>Happy Boyfriend's Day to my Kuchu Puchu !</span>
+      </h1>
+      <p class="hero-subtitle">
+        I am so genuinely sorry that i couldn't wish you yesterday. You deserve the world, and I promise to never let your special day slip my mind again!
+      </p>
+    </div>
+
+    <div class="letter-card">
+      <div class="letter-header">
+        <span class="letter-salutation">My Dearest Love,</span>
+        <div class="wax-seal">☕</div>
+      </div>
+
+      <div class="letter-body">
+        <p>
+          I felt so terrible when I realized I missed National Boyfriend Day. You are always soo gentle and loving to me, and you deserve all the love and warm hugs every single day.
+        </p>
+        <p>
+          Please know that Im really sorry for forgetting the day.And haa,i forgot the day does not mean I ever forget how special you are. You make my life brighter, cozier, and so much sweeter. I love you more than words or dates on a calendar can express!
+        </p>
+        <p>
+          To make it up to you, I made these official "Forgive Me" passes below. Tap any coupon to redeem it whenever you want! And choose wisely ,You get to choose only 2 !!!!
+        </p>
+      </div>
+
+      <div class="handwritten-sign">
+        Forever yours with love     -your jhingur🤎
+      </div>
+    </div>
+
+    <div>
+      <h2 class="section-title">Forgive Me Coupons 🏷️</h2>
+      <p class="section-sub">Tap any pass to redeem your peace offering</p>
+
+      <div class="coupons-grid">
+        <!-- Coupon 1 -->
+        <div class="coupon-ticket" onclick="redeemCoupon(this)">
+          <div class="coupon-content">
+            <div class="coupon-emoji">🍕</div>
+            <div class="coupon-text">
+              <h4>Dinner on Me</h4>
+              <p>Your favorite restaurant or takeout, my treat!</p>
+            </div>
+          </div>
+          <button class="coupon-btn">Redeem</button>
+        </div>
+
+        <!-- Coupon 2 -->
+        <div class="coupon-ticket" onclick="redeemCoupon(this)">
+          <div class="coupon-content">
+            <div class="coupon-emoji">💆‍♂️</div>
+            <div class="coupon-text">
+              <h4>Relaxing Massage</h4>
+              <p>Back, shoulder, or head massage after a long day.</p>
+            </div>
+          </div>
+          <button class="coupon-btn">Redeem</button>
+        </div>
+
+        <!-- Coupon 3 -->
+        <div class="coupon-ticket" onclick="redeemCoupon(this)">
+          <div class="coupon-content">
+            <div class="coupon-emoji">🎬</div>
+            <div class="coupon-text">
+              <h4>Movie Pick</h4>
+              <p>We'll watch any movie your call!</p>
+            </div>
+          </div>
+          <button class="coupon-btn">Redeem</button>
+        </div>
+
+        <!-- Coupon 4 -->
+        <div class="coupon-ticket" onclick="redeemCoupon(this)">
+          <div class="coupon-content">
+            <div class="coupon-emoji">☕</div>
+            <div class="coupon-text">
+              <h4>Unlimited Cozy Cuddles</h4>
+              <p>Warm hugs, Unlimited kissies, and zero distractions.</p>
+            </div>
+          </div>
+          <button class="coupon-btn">Redeem</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="forgiveness-box">
+      <h3>Do You Forgive Me Baby? 🥺</h3>
+      <p>I promise to be less of a bhullakad and you won't need to remind me to give you endless kisses!</p>
+
+      <div class="buttons-wrapper" id="poll-container">
+        <button class="btn-yes" id="yes-btn" onclick="handleForgiveness()">Yes, I forgive you jhingurr! 🤎</button>
+        <button class="btn-shy" id="no-btn" onclick="handleShyClick()">Still thinking... 🤔</button>
+      </div>
+
+      <div class="forgiven-celebration" id="celebration-box">
+        <h4>Yay! Thank you MY Kuchu Puchu! 🥰</h4>
+        <p>You are my most favorite person in the world cutiee. Happy Belated Boyfriend Day! I love you soooo soooooooooo much!</p>
+      </div>
+    </div>
+
+    <footer>
+      <div class="floral-divider">
+        <div class="floral-line"></div>
+        <span>❀ ☕ ❀</span>
+        <div class="floral-line"></div>
+      </div>
+      <p>And to answer your question , the part of your body (I love the whole you buttt to answer your question)which I love the most is your chest because that's where your heart is (and nipples).</p>
+    <p1>And yess get well soon my love </p1>
+    </footer>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById('petal-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const petals = [];
+    const petalColors = ['#E2D3BE', '#D8A47F', '#C49A6C', '#FAF6F0'];
+
+    class Petal {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height * 0.5;
+        this.size = Math.random() * 8 + 6;
+        this.speedY = Math.random() * 0.8 + 0.6;
+        this.speedX = Math.random() * 0.6 - 0.3;
+        this.angle = Math.random() * 360;
+        this.spinSpeed = Math.random() * 1.5 - 0.75;
+        this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+        this.opacity = Math.random() * 0.5 + 0.3;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += Math.sin(this.y * 0.01) * 0.6 + this.speedX;
+        this.angle += this.spinSpeed;
+
+        if (this.y > height + 20) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.angle * Math.PI) / 180);
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = this.color;
+        
+        // Draw petal teardrop shape
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // Initialize 28 gentle petals
+    for (let i = 0; i < 28; i++) {
+      const p = new Petal();
+      p.y = Math.random() * height; // initial spread
+      petals.push(p);
+    }
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < petals.length; i++) {
+        petals[i].update();
+        petals[i].draw();
+      }
+      requestAnimationFrame(animatePetals);
+    }
+
+    window.onload = function() {
+      animatePetals();
+    };
+
+    function redeemCoupon(element) {
+      if (!element.classList.contains('redeemed')) {
+        element.classList.add('redeemed');
+        const btn = element.querySelector('.coupon-btn');
+        btn.textContent = 'Claimed! ✓';
+        createMiniBurst(element);
+      }
+    }
+
+    let shyCount = 0;
+    const shyMessages = [
+      "Are you sure? 🥺",
+      "I'll give extra cuddles! 🧸",
+      "I'll give dherrr saari kissi !!!!",
+      "What if I make cuttlets?! ",
+      "I love you ajjuuuuuuu 💕",
+      "Please maan jao naaaaa",
+      "Abi iske baad mai gussa ho jaungi",
+      "PLEASEEEE BOLA NAAAA",
+    ];
+
+    function handleShyClick() {
+      const shyBtn = document.getElementById('no-btn');
+      const yesBtn = document.getElementById('yes-btn');
+      
+      if (shyCount < shyMessages.length) {
+        shyBtn.textContent = shyMessages[shyCount];
+        shyCount++;
+      } else {
+        // Switch into a secondary yes button
+        shyBtn.textContent = "Okay, I forgive you suu! ";
+        shyBtn.className = "btn-yes";
+        shyBtn.onclick = handleForgiveness;
+      }
+
+      // Slightly increase size of Yes button to be irresistible
+      const currentScale = 1 + shyCount * 0.12;
+      yesBtn.style.transform = `scale(${currentScale})`;
+    }
+
+    function handleForgiveness() {
+      const celebrationBox = document.getElementById('celebration-box');
+      const buttonsWrapper = document.getElementById('poll-container');
+      
+      buttonsWrapper.style.display = 'none';
+      celebrationBox.style.display = 'block';
+
+      // Flower petal burst
+      for (let i = 0; i < 15; i++) {
+        const p = new Petal();
+        p.x = width / 2;
+        p.y = height * 0.7;
+        p.speedY = -(Math.random() * 3 + 2);
+        p.speedX = (Math.random() - 0.5) * 6;
+        petals.push(p);
+      }
+    }
+
+    function createMiniBurst(element) 
+    {
+      const rect = element.getBoundingClientRect();
+      for (let i = 0; i < 8; i++) {
+        const p = new Petal();
+        p.x = rect.left + rect.width / 2;
+        p.y = rect.top + rect.height /2;
+        p.speedY = -(Math.random() * 2+1);
+        p.speedX= (Math.random() -0.5)*4;
+        petals.push(p);
+        }
+      }
+    </script>
+  </body>
+  </html>
